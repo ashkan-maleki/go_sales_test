@@ -21,7 +21,7 @@ WORKDIR /service
 CMD ["./go_sales_test"]
 
 LABEL org.opencontainers.image.created="${BUILD_DATE}" \
-      org.opencontainers.image.title="sales-api" \
+      org.opencontainers.image.title="go_sales_test" \
       org.opencontainers.image.authors="William Kennedy <bill@ardanlabs.com>" \
       org.opencontainers.image.source="https://github.com/ardanlabs/service/app/sales-api" \
       org.opencontainers.image.revision="${BUILD_REF}" \

@@ -28,7 +28,19 @@ kind-up:
 kind-down:
 	sudo kind delete cluster --name $(KIND_CLUSTER)
 
+kind-load:
+	sudo kind load docker-image go-sales-test:$(VERSION) --name $(KIND_CLUSTER)
+
+kind-apply:
+	sudo cat zarf/k8s/base/service-pod/base-service.yaml | sudo kubectl apply -f -
+
 kind-status:
 	sudo kubectl get nodes -o wide
 	sudo kubectl get svc -o wide
 	sudo kubectl get pods -o wide --watch --all-namespaces
+
+kind-logs:
+	sudo kubectl logs -l app=service --all-containers=true -f --tail=100 --namespace=service-system
+
+kind-restart:
+	sudo kubectl rollout restart deployment service-pod --namespace=service-system

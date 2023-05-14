@@ -17,7 +17,7 @@ func main() {
 	signal.Notify(shutdown, syscall.SIGINT, syscall.SIGTERM)
 	<-shutdown
 
-	log.Println("stopping serviice")
+	log.Println("stopping service")
 }
 
 //https://github.com/ardanlabs/service
