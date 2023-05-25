@@ -6,17 +6,20 @@ run:
 #build:
 #	go build -ldflags "-X main.build=local"
 
-VERSION := 1.0
+VERSION := 1.0.0
 
 all: service
 
 service:
 	sudo docker build \
 		-f zarf/docker/dockerfile \
-		-t go_sales_test:$(VERSION) \
+		-t ashkanmaleki/go_sales_test:$(VERSION) \
 		--build-arg BUILD_REF=$(VERSION) \
 		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
 		.
+
+docker-push:
+	docker push ashkanmaleki/go_sales_test:$(VERSION)
 
 KIND_CLUSTER := ardan-starter-cluster
 kind-up:
@@ -29,7 +32,7 @@ kind-down:
 	sudo kind delete cluster --name $(KIND_CLUSTER)
 
 kind-load:
-	sudo kind load docker-image go-sales-test:$(VERSION) --name $(KIND_CLUSTER)
+	sudo kind load docker-image ashkanmaleki/go_sales_test:$(VERSION) --name $(KIND_CLUSTER)
 
 kind-apply:
 	sudo cat zarf/k8s/base/service-pod/base-service.yaml | sudo kubectl apply -f -

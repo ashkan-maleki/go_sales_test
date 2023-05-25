@@ -1,3 +1,3 @@
 module github.com/mamalmaleki/go_sales_test
 
-go 1.19
+go 1.20
