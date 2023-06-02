@@ -11,7 +11,7 @@ WORKDIR /service
 RUN go mod download
 
 # Copy the source code into the container
-COPY . /service
+COPY .. /service
 
 # Build the service binary
 #WORKDIR /service
