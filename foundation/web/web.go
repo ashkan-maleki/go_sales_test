@@ -43,12 +43,11 @@ func (a *App) Handle(method, group, path string, handler Handler, mw ...Middlewa
 	handler = wrapMiddleware(mw, handler)
 
 	// Add the application's general middleware to the handler chain.
-	handler = wrapMiddleware(mw, handler)
+	handler = wrapMiddleware(a.mw, handler)
 
 	// The function to execute for each request.
 	h := func(w http.ResponseWriter, r *http.Request) {
 		// PRE CODE PROCESSING
-
 		// Call the wrapped handler function.
 		if err := handler(r.Context(), w, r); err != nil {
 			// Error handling

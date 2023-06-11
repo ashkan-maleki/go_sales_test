@@ -6,6 +6,7 @@ import (
 	"expvar"
 	"github.com/mamalmaleki/go_sales_test/app/services/sales-api/handlers/debug/checkgrp"
 	"github.com/mamalmaleki/go_sales_test/app/services/sales-api/handlers/v1/testgrp"
+	"github.com/mamalmaleki/go_sales_test/business/web/mid"
 	"github.com/mamalmaleki/go_sales_test/foundation/web"
 	"go.uber.org/zap"
 	"net/http"
@@ -62,7 +63,10 @@ type APIMuxConfig struct {
 
 // APIMux constructs a http.Handler with all application routes defined.
 func APIMux(cfg APIMuxConfig) *web.App {
-	app := web.NewApp(cfg.Shutdown)
+	app := web.NewApp(
+		cfg.Shutdown,
+		mid.Logger(cfg.Log),
+	)
 
 	// Load the routes for the different versions of the API.
 	v1(app, cfg)
