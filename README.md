@@ -1,10 +1,10 @@
 # go_sales_test
 
-1- make kind-up
-2- make kind-status
-3- make kind-load
-3- make kind-apply
-19-14:40
+1- make kind-up <br/>
+2- make kind-status <br/>
+3- make kind-load <br/>
+3- make kind-apply <br/>
+<br/>
 
-sudo kubectl get pods --namespace=service-system
-sudo kubectl describe pod service-pod-65978cb7fb-9q25b --namespace=service-system
+sudo kubectl get pods --namespace=service-system <br/>
+sudo kubectl describe pod service-pod-65978cb7fb-9q25b --namespace=service-system <br/>

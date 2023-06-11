@@ -4,9 +4,9 @@ package handlers
 
 import (
 	"expvar"
-	"github.com/dimfeld/httptreemux/v5"
 	"github.com/mamalmaleki/go_sales_test/app/services/sales-api/handlers/debug/checkgrp"
 	"github.com/mamalmaleki/go_sales_test/app/services/sales-api/handlers/v1/testgrp"
+	"github.com/mamalmaleki/go_sales_test/foundation/web"
 	"go.uber.org/zap"
 	"net/http"
 	"net/http/pprof"
@@ -31,7 +31,6 @@ func DebugStandardLibraryMux() *http.ServeMux {
 	return mux
 }
 
-
 // DebugMux registers all the debug standard library routes and the custom
 // debug application routes for the service. This bypassing the use of the
 // DefaultServiceMux. Using the DefaultServerMux would be a security risk since
@@ -42,7 +41,7 @@ func DebugMux(build string, log *zap.SugaredLogger) http.Handler {
 	// Register debug check endpoints
 	cgh := checkgrp.Handlers{
 		Build: build,
-		Log: log,
+		Log:   log,
 		//DB: db,
 	}
 
@@ -62,14 +61,21 @@ type APIMuxConfig struct {
 }
 
 // APIMux constructs a http.Handler with all application routes defined.
-func APIMux(cfg APIMuxConfig) *httptreemux.ContextMux {
-	mux := httptreemux.NewContextMux()
+func APIMux(cfg APIMuxConfig) *web.App {
+	app := web.NewApp(cfg.Shutdown)
+
+	// Load the routes for the different versions of the API.
+	v1(app, cfg)
+
+	return app
+}
+
+// v1 binds all the version 1 routes.
+func v1(app *web.App, cfg APIMuxConfig) {
+	const version = "v1"
 
 	tgh := testgrp.Handlers{
 		Log: cfg.Log,
-		//DB: db,
 	}
-
-	mux.Handle(http.MethodGet, "/v1/test", tgh.Test)
-	return mux
+	app.Handle(http.MethodGet, version, "/test", tgh.Test)
 }

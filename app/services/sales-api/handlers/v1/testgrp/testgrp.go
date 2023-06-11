@@ -1,24 +1,25 @@
 package testgrp
 
 import (
-	"encoding/json"
+	"context"
+	"github.com/mamalmaleki/go_sales_test/foundation/web"
 	"go.uber.org/zap"
 	"net/http"
 )
 
 // Handlers manages the set of check endpoints.
 type Handlers struct {
-	Log   *zap.SugaredLogger
+	Log *zap.SugaredLogger
 	//DB    *sqlx.DB
 }
 
-func (h Handlers) Test(w http.ResponseWriter, r *http.Request) {
+func (h Handlers) Test(ctx context.Context, w http.ResponseWriter,
+	r *http.Request) error {
 	status := struct {
 		Status string
 	}{
 		Status: "OK",
 	}
-	json.NewEncoder(w).Encode(status)
 
 	statusCode := http.StatusOK
 	h.Log.Infow("readiness", "statusCode", statusCode,
@@ -26,4 +27,6 @@ func (h Handlers) Test(w http.ResponseWriter, r *http.Request) {
 		"path", r.URL.Path,
 		"remote address", r.RemoteAddr,
 	)
+
+	return web.Respond(ctx, w, status, statusCode)
 }
