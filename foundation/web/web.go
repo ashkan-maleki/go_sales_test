@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/dimfeld/httptreemux/v5"
 	"github.com/google/uuid"
+	"log"
 	"net/http"
 	"os"
 	"syscall"
@@ -59,6 +60,13 @@ func (a *App) Handle(method, group, path string, handler Handler, mw ...Middlewa
 		}
 
 		ctx = context.WithValue(ctx, key, &v)
+
+		v1, err := GetValues(ctx)
+		if err != nil {
+			return // web.NewShutdownError("web value missing from context)
+		}
+		log.Println("*******web.go******")
+		log.Println(v1.TraceID)
 
 		// Call the wrapped handler function.
 		if err := handler(ctx, w, r); err != nil {

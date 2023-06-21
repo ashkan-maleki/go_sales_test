@@ -33,9 +33,8 @@ func Respond(ctx context.Context, w http.ResponseWriter, data any, statusCode in
 	if _, err := w.Write(jsonData); err != nil {
 		return err
 	}
-
 	return nil
 
 	//return json.NewEncoder(w).Encode(status)
-	return nil
+	//return nil
 }

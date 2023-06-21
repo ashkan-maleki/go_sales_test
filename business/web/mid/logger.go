@@ -18,22 +18,21 @@ func Logger(log *zap.SugaredLogger) web.Middleware {
 			if err != nil {
 				return err // web.NewShutdownError("web value missing from context)
 			}
-
 			log.Infow("request started",
-				"trace_id", v.TraceID,
+				"traceid", v.TraceID,
 				"method", r.Method,
 				"path", r.URL.Path,
-				"remote_addr", r.RemoteAddr)
+				"remoteaddr", r.RemoteAddr)
 
 			// Call the next handler.
 			err = handler(ctx, w, r)
 
 			log.Infow("request completed",
-				"trace_id", v.TraceID,
+				"traceid", v.TraceID,
 				"method", r.Method,
 				"path", r.URL.Path,
-				"remote_addr", r.RemoteAddr,
-				"status_code", v.StatusCode,
+				"remoteaddr", r.RemoteAddr,
+				"statuscode", v.StatusCode,
 				"since", time.Since(v.Now),
 			)
 
