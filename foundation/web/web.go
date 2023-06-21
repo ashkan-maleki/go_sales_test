@@ -3,9 +3,11 @@ package web
 import (
 	"context"
 	"github.com/dimfeld/httptreemux/v5"
+	"github.com/google/uuid"
 	"net/http"
 	"os"
 	"syscall"
+	"time"
 )
 
 // Handler is a type that handles a http request within out own little mux
@@ -47,6 +49,21 @@ func (a *App) Handle(method, group, path string, handler Handler, mw ...Middlewa
 
 	// The function to execute for each request.
 	h := func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+		// Set the context with the required values to process the request.
+		v := Values{
+			//TraceID: span.SpanContext().TraceID().String(),
+			TraceID: uuid.New().String(),
+			Now:     time.Now(),
+		}
+		ctx = context.WithValue(ctx, key, &v)
+
+		// Call the wrapped handler function.
+		if err := handler(ctx, w, r); err != nil {
+			a.SignalShutdown()
+			return
+		}
+
 		// PRE CODE PROCESSING
 		// Call the wrapped handler function.
 		if err := handler(r.Context(), w, r); err != nil {
