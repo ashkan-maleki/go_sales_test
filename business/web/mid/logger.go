@@ -12,10 +12,6 @@ import (
 func Logger(log *zap.SugaredLogger) web.Middleware {
 	m := func(handler web.Handler) web.Handler {
 		h := func(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
-			//traceID := "0000000000000000"
-			//statusCode := http.StatusOK
-			//now := time.Now()
-
 			// If the context is missing this value, request the service
 			// to be shutdown gracefully.
 			v, err := web.GetValues(ctx)

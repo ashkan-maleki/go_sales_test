@@ -49,6 +49,7 @@ func (a *App) Handle(method, group, path string, handler Handler, mw ...Middlewa
 
 	// The function to execute for each request.
 	h := func(w http.ResponseWriter, r *http.Request) {
+		// Pull the context with the required values to process the request.
 		ctx := r.Context()
 		// Set the context with the required values to process the request.
 		v := Values{
@@ -56,18 +57,12 @@ func (a *App) Handle(method, group, path string, handler Handler, mw ...Middlewa
 			TraceID: uuid.New().String(),
 			Now:     time.Now(),
 		}
+
 		ctx = context.WithValue(ctx, key, &v)
 
 		// Call the wrapped handler function.
 		if err := handler(ctx, w, r); err != nil {
 			a.SignalShutdown()
-			return
-		}
-
-		// PRE CODE PROCESSING
-		// Call the wrapped handler function.
-		if err := handler(r.Context(), w, r); err != nil {
-			// Error handling
 			return
 		}
 	}
