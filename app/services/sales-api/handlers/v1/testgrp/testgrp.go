@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/mamalmaleki/go_sales_test/foundation/web"
 	"go.uber.org/zap"
+	"log"
 	"net/http"
 )
 
@@ -20,6 +21,13 @@ func (h Handlers) Test(ctx context.Context, w http.ResponseWriter,
 	}{
 		Status: "OK",
 	}
+
+	v, err := web.GetValues(ctx)
+	if err != nil {
+		return err // web.NewShutdownError("web value missing from context)
+	}
+	log.Println("*************")
+	log.Println(v.TraceID)
 
 	return web.Respond(ctx, w, status, http.StatusOK)
 }
